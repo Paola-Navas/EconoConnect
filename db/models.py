@@ -18,8 +18,7 @@ class Usuario(Base):
     direccion = Column(String(255))
     pais = Column(String(50))
     fecha_creacion = Column(TIMESTAMP)
-    id_usuarioseguidor = Column(Integer)
-    id_usuarioseguido = Column(Integer)
+
 
 
 class Rol(Base):
@@ -39,16 +38,11 @@ class UsuarioRol(Base):
                     primary_key=True
                     )
 
-class UsuarioSeguidor(Base):
-    __tablename__ = "usuario_seguidor"
-    id_usuario_seguidor = Column(Integer, primary_key=True)
-    usuarioseguidor = Column(Integer, ForeignKey('usuario.id_usuario'))
+class Seguidores(Base):
+    __tablename__ = "seguidores"
 
-class UsuarioSeguido(Base):
-    __tablename__ = "usuario_seguido"
-    id_usuario_seguido = Column(Integer, primary_key=True)
-    usuarioseguido = Column(Integer, ForeignKey('usuario.id_usuario'))
-
+    usuario_seguidor = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
+    usuario_seguido = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
 class Foro(Base):
     __tablename__ = "foro"
     id_foro = Column(Integer, 

@@ -12,7 +12,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from db.database import Base, MARIADB_URL
-from db.models import Chat,ChatMensaje,ChatMensajeAdjunto,ChatMiembro,Foro,Publicacion,Etiqueta,PublicacionAdjunto,PublicacionEtiqueta,Comentario,ComentarioAdjunto, Adjunto, Usuario,Rol,UsuarioRol,UsuarioSeguidor, UsuarioSeguido, Grafica, DatoGrafica
+from db.models import Chat,ChatMensaje,ChatMensajeAdjunto,ChatMiembro,Foro,Publicacion,Etiqueta,PublicacionAdjunto,PublicacionEtiqueta,Comentario,ComentarioAdjunto,Adjunto,Usuario,Rol,Seguidores,Grafica,DatoGrafica
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -85,20 +85,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-    with context.begin_transaction():
-            context.run_migrations()
-
-
-if context.is_offline_mode():
-    run_migrations_offline()
-else:
-    run_migrations_online()
-    with context.begin_transaction():
-        context.run_migrations()
-
-
-if context.is_offline_mode():
-    run_migrations_offline()
-else:
-    run_migrations_online()
-

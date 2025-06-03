@@ -1,8 +1,8 @@
-"""Add Tables
+"""Add tables
 
-Revision ID: b8302acae8f0
+Revision ID: f432c07ed5ed
 Revises: 
-Create Date: 2025-06-03 10:41:34.499999
+Create Date: 2025-06-03 15:30:56.832159
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b8302acae8f0'
+revision: str = 'f432c07ed5ed'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -46,6 +46,9 @@ def upgrade() -> None:
     sa.Column('contrasena', sa.String(length=255), nullable=True),
     sa.Column('estado', sa.Enum('activo', 'inactivo'), nullable=True),
     sa.Column('verificacion', sa.Enum('pendiente', 'aprobado', 'rechazado'), nullable=True),
+    sa.Column('telefono', sa.Integer(), nullable=True),
+    sa.Column('direccion', sa.String(length=255), nullable=True),
+    sa.Column('pais', sa.String(length=50), nullable=True),
     sa.Column('fecha_creacion', sa.TIMESTAMP(), nullable=True),
     sa.PrimaryKeyConstraint('id_usuario')
     )
@@ -61,19 +64,10 @@ def upgrade() -> None:
     op.create_table('chat_mensaje',
     sa.Column('id_mensaje', sa.Integer(), nullable=False),
     sa.Column('id_chat', sa.Integer(), nullable=True),
-    sa.Column('id_usuario', sa.Integer(), nullable=True),
     sa.Column('contenido', sa.Text(), nullable=True),
     sa.Column('fecha_envio', sa.TIMESTAMP(), nullable=True),
     sa.ForeignKeyConstraint(['id_chat'], ['chat.id_chat'], ),
-    sa.ForeignKeyConstraint(['id_usuario'], ['usuario.id_usuario'], ),
     sa.PrimaryKeyConstraint('id_mensaje')
-    )
-    op.create_table('chat_miembro',
-    sa.Column('id_chat', sa.Integer(), nullable=False),
-    sa.Column('id_usuario', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['id_chat'], ['chat.id_chat'], ),
-    sa.ForeignKeyConstraint(['id_usuario'], ['usuario.id_usuario'], ),
-    sa.PrimaryKeyConstraint('id_chat', 'id_usuario')
     )
     op.create_table('dato_grafica',
     sa.Column('id_dato', sa.Integer(), nullable=False),
@@ -117,6 +111,15 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['id_adjunto'], ['adjunto.id_adjunto'], ),
     sa.ForeignKeyConstraint(['id_mensaje'], ['chat_mensaje.id_mensaje'], ),
     sa.PrimaryKeyConstraint('id_mensaje', 'id_adjunto')
+    )
+    op.create_table('chat_miembro',
+    sa.Column('id_chat', sa.Integer(), nullable=False),
+    sa.Column('id_usuario', sa.Integer(), nullable=False),
+    sa.Column('id_chatmensaje', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['id_chat'], ['chat.id_chat'], ),
+    sa.ForeignKeyConstraint(['id_chatmensaje'], ['chat_mensaje.id_mensaje'], ),
+    sa.ForeignKeyConstraint(['id_usuario'], ['usuario.id_usuario'], ),
+    sa.PrimaryKeyConstraint('id_chat', 'id_usuario', 'id_chatmensaje')
     )
     op.create_table('publicacion',
     sa.Column('id_publicacion', sa.Integer(), nullable=False),
@@ -172,12 +175,12 @@ def downgrade() -> None:
     op.drop_table('publicacion_adjunto')
     op.drop_table('comentario')
     op.drop_table('publicacion')
+    op.drop_table('chat_miembro')
     op.drop_table('chat_mensaje_adjunto')
     op.drop_table('usuario_rol')
     op.drop_table('foro')
     op.drop_table('etiqueta')
     op.drop_table('dato_grafica')
-    op.drop_table('chat_miembro')
     op.drop_table('chat_mensaje')
     op.drop_table('adjunto')
     op.drop_table('usuario')
