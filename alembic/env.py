@@ -11,9 +11,10 @@ import os
 # Agrega el directorio raíz del proyecto al path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from db.database import Base, MARIADB_URL
-from db.models import Chat,ChatMensaje,ChatMensajeAdjunto,ChatMiembro,Foro,Publicacion,Etiqueta,PublicacionAdjunto,PublicacionEtiqueta,Comentario,ComentarioAdjunto,Adjunto,Usuario,Rol,Seguidores,Grafica,DatoGrafica
-
+from db import engine, MARIADB_URL, Base
+#Todo lo que se va a migrar
+from models import Usuario, Rol, UsuarioRol, UsuarioSeguidor, UsuarioSeguido, Foro, Publicacion, Etiqueta, PublicacionEtiqueta, Comentario, ComentarioAdjunto, Adjunto, PublicacionAdjunto, Grafica, DatoGrafica, Chat,  ChatMensaje, ChatMiembro, ChatMensajeAdjunto
+#from db.models import Chat,ChatMensaje,ChatMensajeAdjunto,ChatMiembro,Foro,Publicacion,Etiqueta,PublicacionAdjunto,PublicacionEtiqueta,Comentario,ComentarioAdjunto, Adjunto, Usuario,Rol,UsuarioRol,UsuarioSeguidor, UsuarioSeguido, Grafica, DatoGrafica
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -79,6 +80,7 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 
 if context.is_offline_mode():

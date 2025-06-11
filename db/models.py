@@ -20,7 +20,6 @@ class Usuario(Base):
     fecha_creacion = Column(TIMESTAMP)
 
 
-
 class Rol(Base):
     __tablename__ = "rol"
     id_rol = Column(Integer, 
@@ -38,11 +37,16 @@ class UsuarioRol(Base):
                     primary_key=True
                     )
 
-class Seguidores(Base):
-    __tablename__ = "seguidores"
+class UsuarioSeguidor(Base):
+    __tablename__ = "usuario_seguidor"
+    id_usuario = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
+    id_usuario_seguidor = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
 
-    usuario_seguidor = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
-    usuario_seguido = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
+class UsuarioSeguido(Base):
+    __tablename__ = "usuario_seguido"
+    id_usuario = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
+    id_usuario_seguido = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
+
 class Foro(Base):
     __tablename__ = "foro"
     id_foro = Column(Integer, 
@@ -136,23 +140,25 @@ class Chat(Base):
     nombre = Column(String(100))
 
 
+
 class ChatMensaje(Base):
     __tablename__ = "chat_mensaje"
     id_mensaje = Column(Integer, primary_key=True)
     id_chat = Column(Integer, ForeignKey('chat.id_chat'))
     contenido = Column(Text)
     fecha_envio = Column(TIMESTAMP)
+    hora_envio = Column(TIMESTAMP)
+    id_chatmensaje = Column(Integer, ForeignKey('chat_miembro.id_chat'), primary_key=True)
+
 
 
 class ChatMiembro(Base):
     __tablename__ = "chat_miembro"
     id_chat = Column(Integer, ForeignKey('chat.id_chat'), primary_key=True)
     id_usuario = Column(Integer, ForeignKey('usuario.id_usuario'), primary_key=True)
-    id_chatmensaje = Column(Integer, ForeignKey('chat_mensaje.id_mensaje'), primary_key=True)
 
 
 class ChatMensajeAdjunto(Base):
     __tablename__ = "chat_mensaje_adjunto"
     id_mensaje = Column(Integer, ForeignKey('chat_mensaje.id_mensaje'), primary_key=True)
     id_adjunto = Column(Integer, ForeignKey('adjunto.id_adjunto'), primary_key=True)
-
