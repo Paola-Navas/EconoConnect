@@ -36,6 +36,7 @@ class UsuarioRol(Base):
     id_rol = Column(Integer, ForeignKey('rol.id_rol'), 
                     primary_key=True
                     )
+    
 
 class UsuarioSeguidor(Base):
     __tablename__ = "usuario_seguidor"
